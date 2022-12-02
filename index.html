@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="Task">
+        <div><input name="id" placeholder="id" ></div>
+        <div> <input name="name" placeholder="name" ></div>
+        <div> <input name="age" placeholder="age" type="number" min="1" max="90" ></div>
+
+         <div>
+            <input type="radio"  name="status" id="active" value="active">
+            <label for="active">active</label>
+          </div>
+      
+          <div>
+            <input type="radio" id="inactive" value="inactive" name="status" >
+            <label for="inactive">inactive</label>
+          </div>
+          <input type="submit"/>
+         
+    </form>
+    <button name="delete" id="delete" onclick="Delete()">delete</button>
+    <section id="dataWrap">
+
+    </section>
+        
+    <script src="main.js">
+
+      </script>
+
+</body>
+</html>
