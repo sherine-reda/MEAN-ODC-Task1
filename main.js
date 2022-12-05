@@ -1,9 +1,7 @@
-const heads = ["id", "name", "age" , "status" ]
+const addUser = document.querySelector("#addUser")
 
-const addTask = document.querySelector("#Task")
-const dataWrap = document.querySelector("#dataWrap")
 
-const readDataFromStorage = (itemKey="form",resType="json") =>{
+const readDataFromStorage = (itemKey="user",resType="json") =>{
     let data = localStorage.getItem(itemKey)
     if(resType=="json") {
         try{
@@ -14,87 +12,96 @@ const readDataFromStorage = (itemKey="form",resType="json") =>{
         }
     }
     return data
-}
-const writeDataToStorage = (data,itemKey="form")=> localStorage.setItem(itemKey, JSON.stringify(data))
-const DeleteFromStorge = (itemKey="form")=>localStorage.removeItem(itemKey.status)
-if(addTask){
-
-addTask.addEventListener("submit", (e)=>{
-  // e.preventDefault();
-    const task = {}
-    heads.forEach(h=> task[h]= addTask.elements[h].value)
-     data = readDataFromStorage()
-    data.push(task)
-   
-    writeDataToStorage(data)
-
-
-})
-
-}
-
-
-/*function Delete(X){
     
+}
+
+const writeDataToStorage = (data,itemKey="user")=> localStorage.setItem(itemKey, JSON.stringify(data))
+
+
+const addNewUser = (e) =>{
+    e.preventDefault()
+    const user = { 
+        id: Date.now(), 
+         
+    }
+    user.status= addUser.elements.status.value
+    user.name= addUser.elements.name.value
+    user.age= addUser.elements.age.value
+    console.log(user)
     data = readDataFromStorage()
-    console.log(X)
-   const isstatus = (x)=> x ===  ;
-    let index =data.findIndex(isstatus) 
-    console.log(index);
-    data = data.splice(index, 1);
+    data.push(user)
     writeDataToStorage(data)
-}*/
+    displayInfo()
+}
 
+const createMyElement = (
+    parent, 
+    el, 
+    txt=null, 
+    classes=null, 
+    attr=null)=>{
+        const myElement = document.createElement(el)
+        parent.appendChild(myElement)
+        if(txt) 
+            myElement.innerText=txt
+        if(classes)
+            myElement.classList = classes
+        if(attr) 
+            attr.forEach(at=> 
+                myElement.setAttribute(at.key, at.val)
+                )
+        return myElement
+    }
 
-if(dataWrap){
+const body = document.querySelector("body")
+const dataWrap = document.querySelector("#dataWrap")
+const table = document.querySelector("table")
+
+displayInfo()
+
+function displayInfo(){
+    let d = readDataFromStorage()
+    //console.log(d);
+    let i = 0
+    d.forEach(e => {     
+        const myAttr = [
+            {key: "onClick", val:`del(${i})`},
+         
+        ]
+        const myAttr2 = [
+            {key: "onClick", val: `update(${i})`}
+         
+        ]
+      let tr = createMyElement(table, "tr")
+      createMyElement(tr,"td",d[i].id)
+      createMyElement(tr,"td",d[i].name)
+      createMyElement(tr,"td",d[i].age)
+      createMyElement(tr,"td",d[i].status)
+      createMyElement(tr,"button" ,"delete",null,myAttr)
+      createMyElement(tr,"button" ,"update",null,myAttr2)
+     
+      i++
     
-    const data = readDataFromStorage()
     
-    const div2 = document.createElement("div")
-    dataWrap.appendChild(div2)
-    const s = document.createElement("span")
-    const s1 = document.createElement("span")
-    const s2 = document.createElement("span")
-    const s3 = document.createElement("span")
-            s.innerHTML = `id     ,` 
-            s1.innerHTML = `name           ,` 
-            s2.innerHTML = `age             ,` 
-            s3.innerHTML = `status  ` 
-            div2.appendChild(s)
-        div2.appendChild(s1)
-        div2.appendChild(s2)
-        div2.appendChild(s3)
-      data.forEach(d=>{
-        const div = document.createElement("div")
-        dataWrap.appendChild(div)
-        const p = document.createElement("span")
-        const p2 = document.createElement("span")
-        const p3 = document.createElement("span")
-        const p4 = document.createElement("span")
-        const button = document.createElement("button")
-        button.id = `${d.id}` 
-        // button.onclick = Delete(button.id)
-           
-            
-           
-        button.innerText = "delete"
-        p.innerHTML = `${d.id}  ` 
-        p2.innerHTML = `${d.name}  `
-        p3.innerHTML = `${d.age}  `
-        p4.innerHTML = `${d.status}  `
-
-        div.appendChild(p)
-        div.appendChild(p2)
-        div.appendChild(p3)
-        div.appendChild(p4)
-        div.appendChild(button)
-    })
-
- // <button name="delete" id="delete" onclick="Delete()">delete</button>
-
+})
+}
+function del(userId){
+    let k = readDataFromStorage()
+    k[userId].status= "";
+    writeDataToStorage(k)
+    //displayInfo()
 }
 
 
-
-
-
+function update(userId){
+    let k = readDataFromStorage()
+     if(k[userId].status=="active"){ k[userId].statue = "inactive";
+     }else{
+        k[userId].status ="active";
+     }
+     
+     writeDataToStorage(k)   
+    // displayInfo() 
+}
+addUser.addEventListener("submit", (e)=> addNewUser(e))
+   
